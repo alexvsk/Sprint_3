@@ -12,7 +12,7 @@ class Registration(unittest.TestCase):
         self.driver = webdriver.Chrome()
         self.driver.get("https://stellarburgers.nomoreparties.site/register")
 
-    def test_new_user(self):  # Проверка регистрации нового пользователя
+    def test_reg_new_user(self):  # Проверка регистрации нового пользователя
 
         # Заполнение полей ввода
         self.driver.find_element(*lc.NAME_REG).send_keys("alex987")
@@ -23,7 +23,7 @@ class Registration(unittest.TestCase):
         # Ожидание, когда появится форма входа
         WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.LOGIN_FORM))
 
-    def test_reg_error(self):  # Проверка вывода ошибки для некорректного пароля
+    def test_wrong_pass_error(self):  # Проверка вывода ошибки для некорректного пароля
 
         # Заполнение полей ввода
         self.driver.find_element(*lc.NAME_REG).send_keys("mail")

@@ -11,7 +11,7 @@ class Scroll_to_constructor(unittest.TestCase):
         self.driver = webdriver.Chrome()
         self.driver.get("https://stellarburgers.nomoreparties.site/login")
 
-    def test_link_to_sauces(self):  # Проверка перехода к разделу «Соусы»
+    def test_track_to_sauces(self):  # Проверка перехода к разделу «Соусы»
 
         # Заполнение полей ввода
         self.driver.find_element(*lc.EMAIL_LOG).send_keys("alexpogonialin03555@ya.ru")
@@ -28,7 +28,7 @@ class Scroll_to_constructor(unittest.TestCase):
         # Проверка, что в атрибуте тега появился текст
         assert "tab_tab_type_current__2BEPc" in self.driver.find_element(*lc.ATTR_SOUSES).get_attribute('class')
 
-    def test_link_to_rolls(self):  # Проверка перехода к разделу «Булки»
+    def test_track_to_rolls(self):  # Проверка перехода к разделу «Булки»
 
         # Заполнение полей ввода
         self.driver.find_element(*lc.EMAIL_LOG).send_keys("alexpogonialin03555@ya.ru")
@@ -48,7 +48,7 @@ class Scroll_to_constructor(unittest.TestCase):
         # Проверка, что в атрибуте тега появился текст
         assert "tab_tab_type_current__2BEPc" in self.driver.find_element(*lc.ATTR_ROLLS).get_attribute('class')
 
-    def test_link_to_top(self):  # Проверка перехода к разделу «Начинки»
+    def test_track_to_top(self):  # Проверка перехода к разделу «Начинки»
 
     # Заполнение полей ввода
         self.driver.find_element(*lc.EMAIL_LOG).send_keys("alexpogonialin03555@ya.ru")
