@@ -1,46 +1,21 @@
-from selenium import webdriver
+
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
-import unittest
 from locators import Locators as lc
 
-class Logout(unittest.TestCase):
+def test_logout_from_account_page(driver, login):  # Проверка выхода по кнопке «Выйти» в личном кабинете.
 
-    def setUp(self):
+    # Клик по кнопке «Личный кабинет»
+    driver.find_element(*lc.BUTTON_ACCOUNT).click()
 
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://stellarburgers.nomoreparties.site")
+    # Ожидание, что появился элемент с текстом "В этом разделе вы можете изменить свои персональные данные"
+    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(lc.ACCOUNT_TEXT))
 
-    def test_logout_from_account_page(self):  # Проверка выхода по кнопке «Выйти» в личном кабинете.
-        # Клик по кнопке «Войти в аккаунт»
-        self.driver.find_element(*lc.BUTTON_LOG_MAIN).click()
+    # Клик по кнопке "Выйти"
+    driver.find_element(*lc.BUTTON_LOGOUT).click()
 
-        # Ожидание, когда появится форма входа
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.LOGIN_FORM))
+    driver.implicitly_wait(3)
 
-        # Заполнение полей ввода
-        self.driver.find_element(*lc.EMAIL_LOG).send_keys("alexpogonialin03555@ya.ru")
-        self.driver.find_element(*lc.PASS_LOG).send_keys("123456_!")
-        self.driver.find_element(*lc.BUTTON_LOG).click()
+    # Проверка, что появилась форма авторизации
+    assert "Auth_login" in driver.find_element(*lc.LOGIN_FORM).get_attribute("class")
 
-        # Ожидание, когда появится меню с булками на главной
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.MENU_MAIN))
-
-        # Клик по кнопке «Личный кабинет»
-        self.driver.find_element(*lc.BUTTON_ACCOUNT).click()
-
-        # Ожидание, что появился элемент с текстом "В этом разделе вы можете изменить свои персональные данные"
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.ACCOUNT_TEXT))
-
-        # Клик по кнопке "Выйти"
-        self.driver.find_element(*lc.BUTTON_LOGOUT).click()
-
-        # Ожидание, когда появится форма входа
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.LOGIN_FORM))
-
-
-    def tearDown(self):
-        self.driver.quit()
-
-if __name__ == "__main__":
-    unittest.main()

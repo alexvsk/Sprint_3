@@ -1,44 +1,32 @@
-from selenium import webdriver
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.support.wait import WebDriverWait
 from locators import Locators as lc
-import unittest
+def test_reg_new_user(driver):  # Проверка регистрации нового пользователя
+    driver.get("https://stellarburgers.nomoreparties.site/register")
 
+    # Заполнение полей ввода
+    driver.find_element(*lc.NAME_REG).send_keys("alex987")
+    driver.find_element(*lc.EMAIL_REG).send_keys("alexpogonialin03985@ya.ru")
+    driver.find_element(*lc.PASS_REG).send_keys("123456_!")
+    driver.find_element(*lc.BUTTON_REG).click()
 
-class Registration(unittest.TestCase):
+    driver.implicitly_wait(3)
 
-    def setUp(self):
+    # Проверка, что появилась форма авторизации
+    assert "Auth_login" in driver.find_element(*lc.LOGIN_FORM).get_attribute("class")
 
-        self.driver = webdriver.Chrome()
-        self.driver.get("https://stellarburgers.nomoreparties.site/register")
+def test_wrong_pass_error(driver):  # Проверка вывода ошибки для некорректного пароля
+    driver.get("https://stellarburgers.nomoreparties.site/register")
 
-    def test_reg_new_user(self):  # Проверка регистрации нового пользователя
+    # Заполнение полей ввода
+    driver.find_element(*lc.NAME_REG).send_keys("mail")
+    driver.find_element(*lc.EMAIL_REG).send_keys("Mail@mail.ru")
+    driver.find_element(*lc.PASS_REG).send_keys("mail")
 
-        # Заполнение полей ввода
-        self.driver.find_element(*lc.NAME_REG).send_keys("alex987")
-        self.driver.find_element(*lc.EMAIL_REG).send_keys("alexpogonialin03987@ya.ru")
-        self.driver.find_element(*lc.PASS_REG).send_keys("123456_!")
-        self.driver.find_element(*lc.BUTTON_REG).click()
+    driver.find_element(*lc.BUTTON_REG).click()
 
-        # Ожидание, когда появится форма входа
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.LOGIN_FORM))
+    # Ожидание, что поле ввода пароля подсветится красным цветом
+    WebDriverWait(driver, 3).until(expected_conditions.visibility_of_element_located(lc.PASS_ERR))
 
-    def test_wrong_pass_error(self):  # Проверка вывода ошибки для некорректного пароля
-
-        # Заполнение полей ввода
-        self.driver.find_element(*lc.NAME_REG).send_keys("mail")
-        self.driver.find_element(*lc.EMAIL_REG).send_keys("Mail@mail.ru")
-        self.driver.find_element(*lc.PASS_REG).send_keys("mail")
-        self.driver.find_element(*lc.BUTTON_REG).click()
-
-        # Ожидание, что поле ввода пароля подсветится красным цветом
-        WebDriverWait(self.driver, 3).until(expected_conditions.visibility_of_element_located(lc.PASS_ERR))
-
-        # Проверка текста ошибки
-        assert self.driver.find_element(*lc.PASS_ERR_TEXT).text == "Некорректный пароль"
-
-    def tearDown(self):
-        self.driver.quit()
-
-if __name__ == "__main__":
-    unittest.main()
+    # Проверка текста ошибки
+    assert driver.find_element(*lc.PASS_ERR_TEXT).text == "Некорректный пароль"
